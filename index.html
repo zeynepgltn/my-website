@@ -3,143 +3,609 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeynep Gülten | Yazılım Mühendisi & ABAP Geliştirici</title>
+    <title>Zeynep Gülten | Yazılım Mühendisi & SAP ABAP Geliştirici (Retro)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Righteous&family=Fredoka+One&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f172a; 
-            --primary: #2dd4bf;
-            --secondary: #818cf8;
+            /* 70S-80S RETRO PALETTE */
+            --bg-primary: #f4e4c1;      /* Warm Cream */
+            --bg-secondary: #e8d4b8;    /* Light Beige */
+            --accent-warm: #d4602f;     /* Terracotta */
+            --accent-gold: #d4a574;     /* Warm Gold */
+            --accent-rust: #a83c3c;     /* Deep Rust */
+            --accent-olive: #6b7843;    /* Olive Green */
+            --accent-navy: #2c3e50;     /* Deep Navy */
             
-            --glass: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-dark: #3d2817;       /* Deep Brown */
+            --text-medium: #5c4033;     /* Medium Brown */
+            --text-light: #8b6f47;      /* Light Brown */
             
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            
-            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --border-dark: #8b7355;     /* Vintage Border */
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            scroll-behavior: smooth;
+        }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+            font-family: 'Courier Prime', monospace;
+            background-color: var(--bg-primary);
+            color: var(--text-dark);
             overflow-x: hidden;
-            line-height: 1.7;
-            padding-bottom: 0px !important; margin: 0px !important;
+            line-height: 1.75;
+            letter-spacing: 0.02em;
+            position: relative;
         }
 
-        #canvas-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(circle at top center, #1e293b 0%, #0f172a 100%);
+        /* Vintage Paper Texture Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.03) 2px, rgba(0,0,0,.03) 4px),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
+            pointer-events: none;
+            z-index: -1;
         }
 
+        /* VHS Glitch Effect */
+        @keyframes glitch {
+            0% { clip-path: inset(40% 0 61% 0); transform: translate(0); }
+            20% { clip-path: inset(92% 0 1% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px, -2px); }
+            60% { clip-path: inset(25% 0 58% 0); transform: translate(2px, -2px); }
+            80% { clip-path: inset(54% 0 7% 0); transform: translate(2px, 2px); }
+            100% { clip-path: inset(58% 0 43% 0); transform: translate(0); }
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        /* --- NAVBAR --- */
         nav {
-            position: fixed; top: 0; width: 100%; padding: 1.2rem 3rem;
-            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
-            backdrop-filter: blur(12px); background: rgba(15, 23, 42, 0.8);
-            border-bottom: 1px solid var(--glass-border);
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            padding: 1.2rem 3rem;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            z-index: 1000;
+            background: var(--bg-primary);
+            border-bottom: 6px solid var(--accent-rust);
+            border-top: 3px solid var(--accent-gold);
+            box-shadow: 0 8px 0 rgba(0,0,0,0.1);
         }
-        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text-main); }
-        .logo span { color: var(--primary); }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 500; transition: 0.3s; }
-        .nav-links a:hover { color: var(--primary); }
 
-        .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 3rem 4rem; max-width: 1400px; margin: 0 auto; }
-        .hero-content { max-width: 850px; }
-        .hero-label { color: var(--secondary); font-family: 'Space Grotesk', sans-serif; font-weight: 600; letter-spacing: 1px; margin-bottom: 1.5rem; display: inline-block; }
-        .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: 3.8rem; font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; }
-        .hero h1 .highlight { background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 3rem; max-width: 750px; }
-        
-        .btn { padding: 1rem 2.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.8rem; }
-        .btn-primary { background: var(--primary); color: var(--bg-dark); box-shadow: 0 4px 20px rgba(45, 212, 191, 0.3); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(45, 212, 191, 0.4); }
-        .btn-secondary { background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid var(--glass-border); }
-        .btn-secondary:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-3px); }
-
-        section { padding: 6rem 3rem; max-width: 1400px; margin: 0 auto; }
-        .section-header { margin-bottom: 3rem; }
-        .section-label { color: var(--secondary); font-weight: 600; letter-spacing: 1px; display: block; font-family: 'Space Grotesk', sans-serif; margin-bottom: 0.5rem; }
-        .section-title { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin-bottom: 1rem; }
-        
-        .glass-card {
-            background: var(--glass); border: 1px solid var(--glass-border); padding: 2rem;
-            border-radius: 16px; backdrop-filter: blur(10px); transition: 0.4s;
+        .logo { 
+            font-family: 'Fredoka One', sans-serif;
+            font-size: 1.8rem; 
+            font-weight: 900;
+            color: var(--accent-rust);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            text-shadow: 3px 3px 0 var(--accent-gold), 6px 6px 0 rgba(0,0,0,0.1);
         }
-        .glass-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; }
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--text-muted); }
-        .info-row span { color: var(--text-main); font-weight: 600; }
 
-        .timeline { position: relative; padding: 1rem 0; }
-        .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--primary), var(--secondary), transparent); }
-        .timeline-item { position: relative; padding-left: 3rem; margin-bottom: 3rem; }
-        .timeline-dot { position: absolute; left: -6px; top: 5px; width: 14px; height: 14px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.2); }
-        .timeline-role { color: var(--primary); font-weight: 600; margin-bottom: 0.3rem; font-size: 1.1rem; }
-        .timeline-date { color: var(--secondary); font-size: 0.9rem; margin-bottom: 1rem; display: block; font-weight: 500; }
+        .logo span { 
+            color: var(--accent-olive);
+            font-style: italic;
+        }
+
+        .nav-links { 
+            display: flex; 
+            gap: 2.5rem; 
+            list-style: none; 
+        }
+
+        .nav-links a { 
+            color: var(--text-dark); 
+            text-decoration: none; 
+            font-size: 0.9rem;
+            font-weight: 700;
+            font-family: 'Righteous', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.5rem 1rem;
+            border: 3px solid transparent;
+            transition: all 0.15s;
+        }
+
+        .nav-links a:hover { 
+            border: 3px solid var(--accent-rust);
+            background: var(--accent-gold);
+            transform: skew(-5deg);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero { 
+            min-height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            padding: 10rem 3rem 5rem; 
+            max-width: 1200px; 
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hero-content { max-width: 900px; }
+
+        .hero-tag {
+            font-family: 'Courier Prime', monospace;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            background: var(--accent-gold);
+            border: 4px double var(--accent-rust);
+            padding: 0.7rem 1.2rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+            transform: skew(-2deg);
+        }
+
+        .hero h1 { 
+            font-family: 'Fredoka One', sans-serif;
+            font-size: 4.2rem; 
+            font-weight: 900; 
+            line-height: 1.1; 
+            color: var(--accent-rust);
+            margin-bottom: 1.5rem; 
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            text-shadow: 4px 4px 0 var(--accent-gold), 8px 8px 0 rgba(0,0,0,0.2);
+        }
+
+        .hero h1 .gradient-text {
+            color: var(--accent-olive);
+            font-style: italic;
+            text-decoration: underline wavy var(--accent-rust) 3px;
+        }
+
+        .hero p { 
+            font-size: 1rem; 
+            color: var(--text-dark); 
+            margin-bottom: 2.5rem; 
+            line-height: 1.85;
+            font-weight: 400;
+            border-left: 6px solid var(--accent-rust);
+            padding-left: 1.5rem;
+        }
+
+        .btn-group { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+
+        .btn { 
+            padding: 1rem 2.2rem; 
+            border: 4px solid var(--text-dark);
+            text-decoration: none; 
+            font-size: 0.95rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-flex; 
+            align-items: center; 
+            gap: 0.8rem;
+            font-family: 'Righteous', sans-serif;
+            transition: all 0.1s;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+        }
+
+        .btn-primary { 
+            background: var(--accent-rust); 
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover { 
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.25);
+            background: var(--accent-navy);
+        }
+
+        .btn-secondary { 
+            background: var(--accent-gold); 
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover { 
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.25);
+            background: var(--accent-olive);
+            color: var(--bg-primary);
+        }
+
+        /* --- SECTIONS --- */
+        section { 
+            padding: 6rem 3rem; 
+            max-width: 1200px; 
+            margin: 0 auto;
+            border-top: 6px dashed var(--accent-rust);
+        }
+
+        section:first-of-type { border-top: none; }
+
+        .section-header { margin-bottom: 3.5rem; }
+
+        .section-tag { 
+            font-family: 'Courier Prime', monospace;
+            color: var(--accent-rust); 
+            font-size: 0.75rem; 
+            font-weight: 700;
+            letter-spacing: 0.1em; 
+            text-transform: uppercase;
+            margin-bottom: 0.8rem; 
+            display: block;
+        }
+
+        .section-title { 
+            font-family: 'Fredoka One', sans-serif;
+            font-size: 2.8rem; 
+            font-weight: 900; 
+            color: var(--accent-rust);
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0 var(--accent-gold);
+        }
+
+        /* --- CARDS --- */
+        .card {
+            background: var(--bg-secondary); 
+            border: 4px solid var(--accent-rust);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.15s;
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -3px; left: -3px; right: -3px; bottom: -3px;
+            background: linear-gradient(45deg, transparent 30%, var(--accent-gold) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.15s;
+            pointer-events: none;
+        }
+
+        .card:hover { 
+            transform: translate(-4px, -4px);
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.25);
+            background: var(--accent-gold);
+        }
+
+        .card:hover::after { opacity: 0.3; }
+
+        .grid-2 { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); 
+            gap: 2rem; 
+        }
+
+        .info-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 0.8rem; 
+            font-size: 0.95rem; 
+            color: var(--text-dark);
+            border-bottom: 2px dotted var(--text-light);
+            padding-bottom: 0.5rem;
+        }
+
+        .info-row span { 
+            color: var(--accent-rust); 
+            font-weight: 700;
+            font-family: 'Righteous', sans-serif;
+        }
+
+        /* --- TIMELINE --- */
+        .timeline { 
+            position: relative; 
+            padding: 0; 
+        }
+
+        .timeline::before { 
+            content: ''; 
+            position: absolute; 
+            left: 0; 
+            top: 0; 
+            bottom: 0; 
+            width: 6px; 
+            background: linear-gradient(180deg, var(--accent-rust) 0%, var(--accent-gold) 50%, var(--accent-olive) 100%);
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .timeline-item { 
+            position: relative; 
+            padding-left: 3rem; 
+            margin-bottom: 3rem; 
+        }
+
+        .timeline-dot { 
+            position: absolute; 
+            left: -9px; 
+            top: 12px; 
+            width: 24px; 
+            height: 24px; 
+            background: var(--accent-gold);
+            border: 4px solid var(--accent-rust);
+            border-radius: 50%;
+            box-shadow: 0 0 0 4px var(--bg-primary), 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .timeline-role { 
+            color: var(--accent-rust); 
+            font-weight: 900;
+            font-family: 'Righteous', sans-serif;
+            font-size: 1.2rem; 
+            text-transform: uppercase;
+            margin-bottom: 0.3rem; 
+        }
+
+        .timeline-company { 
+            color: var(--accent-olive); 
+            font-size: 1rem; 
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            text-decoration: underline wavy var(--accent-rust);
+        }
+
+        .timeline-date { 
+            font-family: 'Courier Prime', monospace;
+            color: var(--text-light); 
+            font-size: 0.8rem; 
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
         .timeline-content ul { list-style: none; }
-        .timeline-content li { padding: 0.3rem 0 0.3rem 1.5rem; position: relative; color: var(--text-muted); font-size: 0.95rem; }
-        .timeline-content li::before { content: '▹'; position: absolute; left: 0; color: var(--secondary); }
 
-        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
-        .skill-category h4 { margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem; }
-        .skill-category h4 i { color: var(--primary); }
-        .skill-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-        .skill-tag { padding: 0.4rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 6px; font-size: 0.85rem; color: var(--text-muted); transition: 0.3s; cursor: default; }
-        .skill-tag:hover { background: rgba(45, 212, 191, 0.1); color: var(--primary); border-color: var(--primary); }
-
-        .slider-container { width: 100%; overflow-x: auto; padding: 2rem 0; -ms-overflow-style: none; scrollbar-width: none; }
-        .slider-container::-webkit-scrollbar { display: none; }
-        .slider-track { display: flex; gap: 2rem; width: max-content; padding: 0 1rem; }
-        
-        .project-card {
-            width: 440px; min-height: 520px; background: var(--glass); border: 1px solid var(--glass-border);
-            border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: 0.4s;
+        .timeline-content li { 
+            padding: 0.4rem 0 0.4rem 1.5rem; 
+            position: relative; 
+            color: var(--text-dark); 
+            font-size: 0.92rem;
+            margin-bottom: 0.6rem;
         }
-        .project-card:hover { transform: translateY(-10px); border-color: var(--primary); }
-        .project-header { padding: 1.5rem; background: linear-gradient(to bottom right, rgba(45, 212, 191, 0.05), rgba(129, 140, 248, 0.05)); border-bottom: 1px solid var(--glass-border); }
-        .project-header h4 { font-size: 1.25rem; margin-bottom: 0.8rem; color: var(--text-main); }
+
+        .timeline-content li::before { 
+            content: '▸'; 
+            position: absolute; 
+            left: 0; 
+            color: var(--accent-rust);
+            font-weight: 900;
+        }
+
+        /* --- SKILLS GRID --- */
+        .skills-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); 
+            gap: 1.8rem; 
+        }
+
+        .skill-category h4 { 
+            margin-bottom: 1.3rem; 
+            color: var(--accent-rust); 
+            font-size: 1.15rem; 
+            font-weight: 900;
+            display: flex; 
+            align-items: center; 
+            gap: 0.8rem;
+            font-family: 'Righteous', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .skill-category h4 i { 
+            color: var(--accent-olive); 
+            font-size: 1.3rem; 
+        }
+
+        .skill-tags { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 0.7rem; 
+        }
+
+        .skill-tag { 
+            padding: 0.5rem 1rem; 
+            background: var(--accent-gold);
+            border: 2px solid var(--text-dark);
+            border-radius: 0;
+            font-size: 0.8rem;
+            font-family: 'Courier Prime', monospace;
+            color: var(--text-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.1s;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+        }
+
+        .skill-tag:hover { 
+            background: var(--accent-rust);
+            color: var(--bg-primary);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+        }
+
+        /* --- PROJECTS SLIDER --- */
+        .slider-container { 
+            width: 100%; 
+            overflow-x: auto; 
+            padding: 1.5rem 0;
+            -ms-overflow-style: none; 
+            scrollbar-width: none;
+        }
+
+        .slider-container::-webkit-scrollbar { display: none; }
+
+        .slider-track { 
+            display: flex; 
+            gap: 2rem; 
+            width: max-content; 
+        }
+
+        .project-card {
+            width: 480px; 
+            min-height: 560px; 
+            background: var(--bg-secondary);
+            border: 4px solid var(--accent-rust);
+            border-radius: 0;
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column;
+            transition: all 0.15s;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: repeating-linear-gradient(90deg, var(--accent-rust) 0px, var(--accent-rust) 2px, transparent 2px, transparent 4px);
+        }
+
+        .project-card:hover { 
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0 rgba(0,0,0,0.3);
+            border-color: var(--accent-olive);
+        }
+
+        .project-header { 
+            padding: 1.8rem; 
+            background: var(--accent-gold);
+            border-bottom: 4px solid var(--text-dark);
+        }
+
+        .project-header h4 { 
+            font-size: 1.25rem; 
+            font-weight: 900;
+            margin-bottom: 0.8rem; 
+            color: var(--text-dark);
+            font-family: 'Righteous', sans-serif;
+            text-transform: uppercase;
+        }
+
         .project-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .tech-tag { font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 4px; background: rgba(15, 23, 42, 0.6); color: var(--primary); border: 1px solid var(--glass-border); }
-        .project-body { padding: 1.5rem; flex-grow: 1; }
+
+        .tech-tag { 
+            font-size: 0.7rem;
+            font-family: 'Courier Prime', monospace;
+            padding: 0.35rem 0.7rem; 
+            border-radius: 0;
+            background: var(--text-dark);
+            color: var(--bg-primary);
+            border: 1px solid var(--text-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .project-body { padding: 1.8rem; flex-grow: 1; }
+
         .project-body ul { list-style: none; }
-        .project-body li { padding: 0.4rem 0 0.4rem 1.2rem; position: relative; color: var(--text-muted); font-size: 0.9rem; }
-        .project-body li::before { content: '▹'; position: absolute; left: 0; color: var(--secondary); }
 
-        .contact-bar { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 2rem; }
-        .contact-item { display: flex; align-items: center; gap: 0.8rem; padding: 1rem 2rem; background: var(--glass); border-radius: 50px; border: 1px solid var(--glass-border); text-decoration: none; color: var(--text-main); transition: 0.3s; }
-        .contact-item:hover { border-color: var(--primary); background: rgba(45, 212, 191, 0.1); }
-        .contact-item i { color: var(--primary); font-size: 1.2rem; }
+        .project-body li { 
+            padding: 0.5rem 0 0.5rem 1.5rem; 
+            position: relative; 
+            color: var(--text-dark); 
+            font-size: 0.88rem;
+            line-height: 1.7;
+            margin-bottom: 0.6rem;
+        }
 
-        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .project-body li::before { 
+            content: '◆'; 
+            position: absolute; 
+            left: 0; 
+            color: var(--accent-rust);
+            font-weight: 900;
+        }
+
+        /* --- CONTACT --- */
+        .contact-bar { 
+            display: flex; 
+            justify-content: center; 
+            gap: 1.5rem; 
+            flex-wrap: wrap; 
+            margin-top: 2.5rem; 
+        }
+
+        .contact-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.8rem; 
+            padding: 1rem 1.8rem; 
+            background: var(--accent-gold);
+            border: 4px solid var(--text-dark);
+            text-decoration: none; 
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: 'Courier Prime', monospace;
+            transition: all 0.1s;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+        }
+
+        .contact-item:hover { 
+            background: var(--accent-rust);
+            color: var(--bg-primary);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.25);
+        }
+
+        .contact-item i { 
+            color: currentColor;
+            font-size: 1.1rem; 
+        }
+
+        /* --- ANIMATIONS --- */
+        .fade-in { 
+            opacity: 0; 
+            transform: translateY(30px); 
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); 
+        }
+
+        .fade-in.visible { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
 
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .hero h1 { font-size: 2.8rem; }
+            .hero { padding: 8rem 1.5rem 3rem; }
+            .hero h1 { font-size: 2.5rem; }
             .grid-2 { grid-template-columns: 1fr; }
-            .project-card { width: 320px; }
+            .project-card { width: 100%; min-width: 100%; }
             section { padding: 4rem 1.5rem; }
+            nav { padding: 1rem 1.5rem; }
+            .logo { font-size: 1.3rem; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="canvas-container"></canvas>
-
     <nav>
-        <div class="logo">Zeynep<span>.</span>Gülten</div>
+        <div class="logo">ZEYNEP<span>.DEV</span></div>
         <ul class="nav-links">
-            <li><a href="#home">Ana Sayfa</a></li>
+            <li><a href="#home">Giriş</a></li>
             <li><a href="#about">Hakkımda</a></li>
             <li><a href="#experience">Deneyim</a></li>
-            <li><a href="#skills">Yetenekler</a></li>
+            <li><a href="#skills">Yetkinlikler</a></li>
             <li><a href="#projects">Projeler</a></li>
             <li><a href="#contact">İletişim</a></li>
         </ul>
@@ -147,43 +613,63 @@
 
     <section class="hero" id="home">
         <div class="hero-content fade-in">
-            <span class="hero-label">Yazılım Mühendisi | SAP ABAP & AI Developer</span>
-            <h1><span class="highlight">Kurumsal SAP</span> & Yapay Zeka Çözümleri.</h1>
+            <div class="hero-tag">
+                <i class="fas fa-terminal"></i> YAZILIM MÜHENDİSİ
+            </div>
+            <h1>
+                SAP ABAP & <br><span class="gradient-text">ERP ÇÖZÜMLERİ</span>
+            </h1>
             <p>
-                Kurumsal iş süreçlerini modern SAP ABAP teknolojileriyle dönüştüren, Büyük Dil Modelleri (LLM) ve Transformer mimarilerini iş süreçleri otomasyonuyla birleştiren Yazılım Mühendisi. Uçtan uca OOP ABAP, ALV raporlama, Dynpro ekranları, BAPI entegrasyonları ve yapay zeka tabanlı kod modernizasyonu üzerinde çalışıyorum.
+                Kurumsal iş süreçlerini modern OOP ABAP standartlarıyla optimize ediyor; Yapay Zeka ve LLM teknolojilerini kod modernizasyonu ve operasyonel otomasyon çözümleriyle birleştiriyorum. İşletmelerin dijital dönüşüm yolculuğunun yanında yer almak benim tutkum.
             </p>
-            <div class="hero-buttons">
-                <a href="#projects" class="btn btn-primary"><i class="fas fa-code"></i> Projelerimi İncele</a>
-                <a href="#contact" class="btn btn-secondary"><i class="fas fa-envelope"></i> İletişime Geç</a>
+            <div class="btn-group">
+                <a href="#projects" class="btn btn-primary"><i class="fas fa-layer-group"></i> Projeleri Gör</a>
+                <a href="#contact" class="btn btn-secondary"><i class="fas fa-phone"></i> Bana Yazın</a>
             </div>
         </div>
     </section>
 
     <section id="about">
         <div class="section-header fade-in">
-            <span class="section-label">HAKKIMDA & EĞİTİM</span>
-            <h2 class="section-title">Akademik & Profesyonel Geçmiş</h2>
+            <span class="section-tag">1990-2026 | Kariyer Başlangıcı</span>
+            <h2 class="section-title">Hakkımda & Eğitim</h2>
         </div>
         <div class="grid-2 fade-in">
-            <div class="glass-card">
-                <h3><i class="fas fa-graduation-cap" style="color:var(--primary)"></i> Üniversite</h3>
-                <p style="margin: 1rem 0; font-weight: 600; font-size: 1.1rem;">Manisa Celal Bayar Üniversitesi</p>
-                <div class="info-row">Bölüm: <span>Yazılım Mühendisliği (Lisans)</span></div>
-                <div class="info-row">Durum: <span>Mezun (2022 - 2026)</span></div>
-                <div class="info-row">GPA: <span>3.58 / 4.0</span></div>
-                <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">
-                    Odak Alanları: SAP ERP Sistemleri, Kurumsal Veri Modelleme, Derin Öğrenme, Doğal Dil İşleme (NLP), Mobil ve Web Sistemleri.
+            <div class="card">
+                <h3 style="color: var(--accent-rust); font-size: 1.3rem; margin-bottom: 1.3rem; font-family: 'Righteous', sans-serif; text-transform: uppercase;">
+                    📚 LİSANS EĞİTİMİ
+                </h3>
+                <p style="font-weight: 700; color: var(--text-dark); font-size: 1.1rem; margin-bottom: 1rem; font-family: 'Righteous', sans-serif;">
+                    MANISA CELAL BAYAR ÜNİVERSİTESİ
+                </p>
+                <div class="info-row">Bölüm: <span>YAZILIM MÜHENDİSLİĞİ</span></div>
+                <div class="info-row">Durum: <span>Mezun (2022 – 2026)</span></div>
+                <div class="info-row">GANO: <span>3.58 / 4.0</span></div>
+                <p style="margin-top: 1.2rem; font-size: 0.88rem; color: var(--text-dark); border-top: 3px dashed var(--accent-rust); padding-top: 1rem;">
+                    OOP, Veri Yapıları, İlişkisel Veritabanları, Yapay Zeka ve Makine Öğrenmesi dersleri temel formasyon sağladı.
                 </p>
             </div>
-            <div class="glass-card">
-                <h3><i class="fas fa-certificate" style="color:var(--secondary)"></i> Sertifikalar & Diller</h3>
-                <ul style="list-style: none; margin-top: 1rem; color: var(--text-muted);">
-                    <li style="margin-bottom: 0.5rem;">• <strong>SAP ABAP Temel Seviye Eğitimi:</strong> Burak Kocaaslan (Udemy, 2026)</li>
-                    <li style="margin-bottom: 0.5rem;">• <strong>Yapay Zekada Geleceğe Hazır Kadınlar:</strong> Turkcell (2025)</li>
-                    <li style="margin-bottom: 0.5rem;">• <strong>Kotlin Android Bootcamp</strong> (2025)</li>
-                    <li style="margin-bottom: 0.5rem;">• <strong>Makine Öğrenmesi için Python</strong> (Udemy, 2024)</li>
-                    <li style="margin-bottom: 0.5rem;">• <strong>İngilizce:</strong> B1-B2</li>
-                    <li style="margin-bottom: 0.5rem;">• <strong>Almanca:</strong> A1</li>
+            <div class="card">
+                <h3 style="color: var(--accent-rust); font-size: 1.3rem; margin-bottom: 1.3rem; font-family: 'Righteous', sans-serif; text-transform: uppercase;">
+                    🏆 SERTİFİKALAR & DİLLER
+                </h3>
+                <ul style="list-style: none; font-size: 0.88rem;">
+                    <li style="margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--accent-rust); font-weight: 900;">▪</span>
+                        <strong style="color: var(--accent-rust); text-transform: uppercase;">SAP ABAP TEMEL:</strong> Burak Kocaaslan (Udemy, 2026)
+                    </li>
+                    <li style="margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--accent-rust); font-weight: 900;">▪</span>
+                        <strong style="color: var(--accent-rust); text-transform: uppercase;">YAPAY ZEKA:</strong> Turkcell Geleceğe Hazır Kadınlar (2025)
+                    </li>
+                    <li style="margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--accent-rust); font-weight: 900;">▪</span>
+                        <strong style="color: var(--accent-rust); text-transform: uppercase;">KOTLIN ANDROID:</strong> Kasım Adalan Bootcamp (2025)
+                    </li>
+                    <li style="margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--accent-rust); font-weight: 900;">▪</span>
+                        <strong style="color: var(--accent-rust); text-transform: uppercase;">DİLLER:</strong> İngilizce B1-B2 | Almanca A1
+                    </li>
                 </ul>
             </div>
         </div>
@@ -191,57 +677,45 @@
 
     <section id="experience">
         <div class="section-header fade-in">
-            <span class="section-label">DENEYİM</span>
-            <h2 class="section-title">Profesyonel Deneyim</h2>
+            <span class="section-tag">2025-2026 | Profesyonel Yolculuk</span>
+            <h2 class="section-title">Deneyim & Yetkinlik</h2>
         </div>
         <div class="timeline fade-in">
             <div class="timeline-item">
                 <div class="timeline-dot"></div>
-                <div class="timeline-content glass-card">
-                    <h3>Fiks Bilişim</h3>
-                    <div class="timeline-role">ABAP Geliştirici (Kadroda)</div>
-                    <span class="timeline-date">Temmuz 2026 – Günümüz</span>
+                <div class="timeline-content card">
+                    <div class="timeline-role">ABAP GELİŞTİRİCİ (Kadrolu)</div>
+                    <div class="timeline-company">Fiks Bilişim</div>
+                    <span class="timeline-date">TEMMUZ 2026 – GÜNÜMÜZ</span>
                     <ul>
-                        <li>Kurumsal müşteriler için SAP SD, MM ve FI modüllerinde uçtan uca OOP ABAP çözümleri, BAPI entegrasyonları ve raporlama geliştirme.</li>
-                        <li>abapGit ile versiyon kontrol altyapısının yönetimi ve CI/CD süreçlerine uyumlu nesne geliştirme akışları.</li>
-                        <li>Teklif-Sipariş kokpitleri, Excel tabanlı BAPI otomasyonları ve kurumsal çıktı yönetimi (Smart Forms & Adobe Forms).</li>
+                        <li>SAP SD, MM, FI modüllerinde OOP ABAP raporları, BAPI entegrasyonları, uçtan uca iş mantığı geliştirme.</li>
+                        <li>abapGit ile CI/CD uyumlu versiyon kontrol; Git ve SAP sistemleri arası senkronizasyon.</li>
+                        <li>Tekliften siparişe kokpitleri, Excel I/O motorları, Smart Forms & Adobe Forms tasarımları.</li>
                     </ul>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-dot"></div>
-                <div class="timeline-content glass-card">
-                    <h3>Fiks Bilişim</h3>
-                    <div class="timeline-role">ABAP Geliştirici Stajyeri</div>
-                    <span class="timeline-date">Şubat 2026 – Haziran 2026 (5 Ay)</span>
+                <div class="timeline-content card">
+                    <div class="timeline-role">ABAP GELİŞTİRİCİ (Stajyer)</div>
+                    <div class="timeline-company">Fiks Bilişim</div>
+                    <span class="timeline-date">ŞUBAT 2026 – HAZİRAN 2026</span>
                     <ul>
-                        <li>ALV Raporlama (CL_GUI_ALV_GRID, REUSE, SALV), Dynpro ekran programlama ve veri tabanı optimizasyonları (7.40+ Modern ABAP).</li>
-                        <li>Excel I/O mekanizmaları (cl_fdt_xl_spreadsheet), BCS e-posta altyapısı ve dinamik SQL sorgulamaları geliştirme.</li>
-                        <li>Legacy ABAP kodlarının modern mimariye dönüştürülmesi ve BAPI süreçlerinin uçtan uca test edilmesi.</li>
+                        <li>CL_GUI_ALV_GRID üzerinde Toolbar, Hotspot, hücre renklendirme ve validasyon handlerleri.</li>
+                        <li>cl_fdt_xl_spreadsheet ile tipli Excel okuma/indirme, BCS e-posta altyapısı geliştirme.</li>
+                        <li>FORM/PERFORM yapılarından OOP sınıflara refactoring ve performans optimizasyonu.</li>
                     </ul>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-dot"></div>
-                <div class="timeline-content glass-card">
-                    <h3>MT Displays</h3>
-                    <div class="timeline-role">Yazılım Geliştirme Stajyeri</div>
-                    <span class="timeline-date">Temmuz 2025 – Ağustos 2025</span>
+                <div class="timeline-content card">
+                    <div class="timeline-role">YAZILIM GELİŞTİRİCİSİ (Stajyer)</div>
+                    <div class="timeline-company">MT Displays</div>
+                    <span class="timeline-date">TEMMUZ 2025 – AĞUSTOS 2025</span>
                     <ul>
-                        <li>Büyük Dil Modelleri (LLM) ve doğal dil işleme uygulamaları ile iş süreçleri otomasyonu.</li>
-                        <li>SAP sistemlerinde temel ABAP geliştirmeleri ve AI tabanlı sistem modernizasyonu araştırmaları.</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content glass-card">
-                    <h3>Teknopart Bilişim Ltd. Şti.</h3>
-                    <div class="timeline-role">Yazılım Geliştirme Stajyeri</div>
-                    <span class="timeline-date">Haziran 2025 – Temmuz 2025</span>
-                    <ul>
-                        <li>ASP.NET MVC mimarisi ile kurumsal web çözümleri ve SQL Server veritabanı optimizasyonu.</li>
-                        <li>Doğal Dil İşleme (NLP) metin analizi çalışmaları.</li>
+                        <li>LLM ve NLP kütüphaneleri ile iş süreçleri otomasyon AR-GE.</li>
+                        <li>SAP sistemlerinde temel ABAP geliştirmeleri ve AI tabanlı dijital dönüşüm analizleri.</li>
                     </ul>
                 </div>
             </div>
@@ -250,47 +724,46 @@
 
     <section id="skills">
         <div class="section-header fade-in">
-            <span class="section-label">YETKİNLİKLER</span>
-            <h2 class="section-title">Teknik Beceriler</h2>
+            <span class="section-tag">TEKNOLOJİ PARKURU</span>
+            <h2 class="section-title">Teknik Yetkinlikler</h2>
         </div>
         <div class="skills-grid fade-in">
-            <div class="skill-category glass-card">
-                <h4><i class="fas fa-cubes"></i> SAP ABAP Geliştirme</h4>
+            <div class="skill-category card">
+                <h4><i class="fas fa-code"></i> SAP ABAP</h4>
                 <div class="skill-tags">
                     <span class="skill-tag">OOP ABAP</span>
-                    <span class="skill-tag">ABAP 7.40+ Syntax</span>
-                    <span class="skill-tag">CL_GUI_ALV_GRID</span>
+                    <span class="skill-tag">7.40+ Syntax</span>
+                    <span class="skill-tag">ALV Grid</span>
                     <span class="skill-tag">abapGit</span>
-                    <span class="skill-tag">BAPI Entegrasyonu</span>
-                    <span class="skill-tag">Dynpro (PBO/PAI)</span>
+                    <span class="skill-tag">BAPI</span>
+                    <span class="skill-tag">Dynpro</span>
                     <span class="skill-tag">Smart Forms</span>
-                    <span class="skill-tag">Adobe Forms (IFbA)</span>
-                    <span class="skill-tag">BCS Mail Entegrasyonu</span>
-                    <span class="skill-tag">SD / MM / FI Akışları</span>
+                    <span class="skill-tag">Adobe Forms</span>
+                    <span class="skill-tag">BCS Mail</span>
+                    <span class="skill-tag">SD/MM Modül</span>
                 </div>
             </div>
-            <div class="skill-category glass-card">
-                <h4><i class="fas fa-brain"></i> Yapay Zeka & LLM</h4>
+            <div class="skill-category card">
+                <h4><i class="fas fa-robot"></i> Yapay Zeka & LLM</h4>
                 <div class="skill-tags">
-                    <span class="skill-tag">Transformer Architecture</span>
-                    <span class="skill-tag">Self-Attention & LM Head</span>
-                    <span class="skill-tag">LoRA / QLoRA</span>
-                    <span class="skill-tag">BitsAndBytes (4-bit)</span>
-                    <span class="skill-tag">HuggingFace & StarCoder2</span>
-                    <span class="skill-tag">FAISS / RAG</span>
-                    <span class="skill-tag">PyTorch & TensorFlow</span>
+                    <span class="skill-tag">Transformers</span>
+                    <span class="skill-tag">Self-Attention</span>
+                    <span class="skill-tag">BitsAndBytes LoRA</span>
+                    <span class="skill-tag">HuggingFace</span>
+                    <span class="skill-tag">FAISS/RAG</span>
+                    <span class="skill-tag">PyTorch</span>
                     <span class="skill-tag">LangChain</span>
                 </div>
             </div>
-            <div class="skill-category glass-card">
-                <h4><i class="fas fa-laptop-code"></i> Diller & Araçlar</h4>
+            <div class="skill-category card">
+                <h4><i class="fas fa-layer-group"></i> Diller & Stack</h4>
                 <div class="skill-tags">
                     <span class="skill-tag">ABAP</span>
                     <span class="skill-tag">Python</span>
-                    <span class="skill-tag">Kotlin (Android)</span>
-                    <span class="skill-tag">SQL & Relational DB</span>
-                    <span class="skill-tag">Git / GitHub</span>
-                    <span class="skill-tag">SAP GUI & Eclipse ADT</span>
+                    <span class="skill-tag">Kotlin</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">Git/GitHub</span>
+                    <span class="skill-tag">Eclipse ADT</span>
                 </div>
             </div>
         </div>
@@ -298,9 +771,11 @@
 
     <section id="projects">
         <div class="section-header fade-in">
-            <span class="section-label">PORTFOLYO</span>
-            <h2 class="section-title">Öne Çıkan Projeler</h2>
-            <p style="color: var(--text-muted)">Yana kaydırarak kurumsal ve AR-GE projelerimi inceleyebilirsiniz.</p>
+            <span class="section-tag">1-2026 | İmza Projeler</span>
+            <h2 class="section-title">Önemli Başarılar</h2>
+            <p style="color: var(--text-dark); font-size: 0.95rem; margin-top: 0.8rem; font-style: italic;">
+                ◀ ▶ Kartları kaydırarak inceleyebilirsiniz...
+            </p>
         </div>
 
         <div class="slider-container fade-in">
@@ -308,113 +783,95 @@
                 
                 <div class="project-card">
                     <div class="project-header">
-                        <h4>Satıştan Siparişe Dönüşüm Kokpiti</h4>
+                        <h4>Satış → Sipariş Kokpiti</h4>
                         <div class="project-tech">
                             <span class="tech-tag">SD Modülü</span>
-                            <span class="tech-tag">Splitter Container</span>
+                            <span class="tech-tag">Splitter</span>
                             <span class="tech-tag">BAPI</span>
-                            <span class="tech-tag">OOP ABAP</span>
                         </div>
                     </div>
                     <div class="project-body">
                         <ul>
-                            <li>Splitter Container mimarisi ile üstte açık teklif listesi, altta Hotspot tetiklemeli VBAP kalem detayları.</li>
-                            <li>VBFA satış akışı üzerinden açık ve kullanılan miktar doğrulaması; REDUCE ve FOR ALL ENTRIES ile yüksek performans.</li>
-                            <li>BAPI_SALESORDER_CREATEFROMDAT2 ile toplu sipariş oluşturma ve hata kontrolleri (BAPIRET2).</li>
-                            <li>READ_TEXT / SAVE_TEXT ile başlık metin replikasyonu ve dinamik e-posta bildirimi.</li>
+                            <li>Splitter Container: Üst ekran açık teklifler, Hotspot → alt ekran kalem detayları (VBAP).</li>
+                            <li>VBFA satış akışı doğrulaması; REDUCE ile yüksek performans.</li>
+                            <li>BAPI_SALESORDER_CREATEFROMDAT2 toplu sipariş üretimi.</li>
+                            <li>READ_TEXT/SAVE_TEXT metin replikasyonu ve otomatik e-posta.</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="project-card">
                     <div class="project-header">
-                        <h4>Excel Tabanlı Satınalma Talebi (SAT)</h4>
+                        <h4>Excel Satınalma Talebi (SAT)</h4>
                         <div class="project-tech">
                             <span class="tech-tag">MM Modülü</span>
-                            <span class="tech-tag">cl_fdt_xl_spreadsheet</span>
+                            <span class="tech-tag">Excel I/O</span>
                             <span class="tech-tag">BAPI_PR_CREATE</span>
                         </div>
                     </div>
                     <div class="project-body">
                         <ul>
-                            <li>cl_fdt_xl_spreadsheet ile tipli Excel okuma ve otomatik şablon indirme fonksiyonu.</li>
-                            <li>Docking Container üzerinde ALV Grid; düzenlenebilir SELKZ ve interaktif durum trafik ışıkları.</li>
-                            <li>Hesap atama kategorilerine (K, A, P) dinamik dallanarak BAPI_PR_CREATE ile belge üretimi.</li>
-                            <li>Işık tıklamasıyla C14ALD_BAPIRET2_SHOW pop-up hata/başarı log gösterimi ve Rollback/Commit yönetimi.</li>
+                            <li>cl_fdt_xl_spreadsheet tipli Excel okuma ve şablon indirme.</li>
+                            <li>Docking Container + ALV Grid, SELKZ seçim kutuları.</li>
+                            <li>Hesap atama kategorilerine (K, A, P) dinamik dallanma.</li>
+                            <li>Trafik ışığı pop-up log ve Rollback/Commit yönetimi.</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="project-card">
                     <div class="project-header">
-                        <h4>LLM & Transformer Mimarisi Araştırma Deposu</h4>
+                        <h4>LLM & Transformer Lab</h4>
                         <div class="project-tech">
-                            <span class="tech-tag">Attention Mechanism</span>
+                            <span class="tech-tag">Multi-Head</span>
                             <span class="tech-tag">LM Head</span>
                             <span class="tech-tag">PyTorch</span>
                         </div>
                     </div>
                     <div class="project-body">
                         <ul>
-                            <li>Transformer mimarisinin temel bileşenleri: Multi-Head Attention, Embedding ve LM Head modüler tasarımı.</li>
-                            <li>Batch desteği için optimize edilmiş tensor işlemleri ve token analizi (plot_tokens).</li>
-                            <li>StarCoder2 modelini ABAP kod yapısı üzerinde 4-bit LoRA (BitsAndBytes) ile fine-tuning çalışmaları.</li>
-                            <li>ABAP kod modernizasyonu (Legacy → 7.40+) için FAISS vektör veritabanlı RAG ajanları.</li>
+                            <li>Transformer mimarisi: Self-Attention, Embedding, LM Head modülü tasarımı.</li>
+                            <li>Batch tensor optimizasyonları ve token analiz (plot_tokens).</li>
+                            <li>StarCoder2 ABAP kodu üzerinde 4-bit LoRA fine-tuning.</li>
+                            <li>FAISS RAG ajanları ile ABAP kod modernizasyonu (Legacy → 7.40+).</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="project-card">
                     <div class="project-header">
-                        <h4>Gelişmiş ALV ve Kurumsal Çıktı Yönetimi</h4>
+                        <h4>Kurumsal Çıktı Yönetimi</h4>
                         <div class="project-tech">
                             <span class="tech-tag">Smart Forms</span>
-                            <span class="tech-tag">Adobe Forms</span>
+                            <span class="tech-tag">Adobe IFbA</span>
                             <span class="tech-tag">Spooling</span>
                         </div>
                     </div>
                     <div class="project-body">
                         <ul>
-                            <li>SSF_OPEN ve SSF_CLOSE ile seri yazdırma işlemlerini tek bir spool dosyasında optimize etme.</li>
-                            <li>SPELL_AMOUNT fonksiyonu ile belge tutarlarını kuruş hassasiyetinde dinamik metne çevirme.</li>
-                            <li>SFP işlem kodu ve LiveCycle Designer ile modern PDF çıktısı ve QR/Barkod basımı.</li>
-                            <li>Dinamik satır/hücre boyama (LINE_COLOR, CELL_COLOR) ve handle_data_changed validasyonları.</li>
+                            <li>SSF_OPEN/CLOSE ile seri yazdırma (multipage spool).</li>
+                            <li>SPELL_AMOUNT kuruş hassasiyetli tutar-metne çevirimi.</li>
+                            <li>SFP + LiveCycle Designer ile PDF + QR/Barkod basımı.</li>
+                            <li>Dinamik satır/hücre renklendirme ve handle_data_changed validasyonları.</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="project-card">
                     <div class="project-header">
-                        <h4>Ürün Ağacı (BOM) Kopyalama Motoru</h4>
+                        <h4>BOM Kopyalama Motoru</h4>
                         <div class="project-tech">
-                            <span class="tech-tag">CSAP_MAT_BOM_CREATE</span>
-                            <span class="tech-tag">BOM Validation</span>
-                            <span class="tech-tag">MARC / MAST</span>
+                            <span class="tech-tag">CSAP_MAT_BOM</span>
+                            <span class="tech-tag">MARC/MAST</span>
+                            <span class="tech-tag">MM Modülü</span>
                         </div>
                     </div>
                     <div class="project-body">
                         <ul>
-                            <li>Hedef üretim yerinde bileşen kontrolü (MARC) yapan derin doğrulama algoritması.</li>
-                            <li>MAST ve STKO tablolarından ana miktar çekilerek CSAP_MAT_BOM_CREATE BAPI entegrasyonu.</li>
-                            <li>Mevcut stok ve reçete analizine göre maksimum üretilebilir malzeme miktarı hesaplama.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h4>Dinamik Dynpro & Personel / Demirbaş Yönetimi</h4>
-                        <div class="project-tech">
-                            <span class="tech-tag">Dynpro Ekran</span>
-                            <span class="tech-tag">Enqueue / Dequeue</span>
-                            <span class="tech-tag">Custom Container</span>
-                        </div>
-                    </div>
-                    <div class="project-body">
-                        <ul>
-                            <li>Ekran mod flag'leri (Insert/Delete/Update) ve LOOP AT SCREEN ile dinamik alan yönetimi.</li>
-                            <li>Lock Objects (Enqueue/Dequeue) ile eşzamanlı veri düzenleme çakışmalarını engelleme.</li>
-                            <li>Serbest stok ile demirbaşlar arasında çift yönlü durum geçişi sunan interaktif çift ALV ekranı.</li>
+                            <li>Hedef üretim yerinde bileşen kontrolü (MARC) derin validasyon.</li>
+                            <li>MAST/STKO tablolarından ana miktar çekilmesi.</li>
+                            <li>CSAP_MAT_BOM_CREATE BAPI entegrasyonu ve hata yönetimi.</li>
+                            <li>Maksimum üretilebilir malzeme miktarı hesabı (stok analizi).</li>
                         </ul>
                     </div>
                 </div>
@@ -425,96 +882,53 @@
 
     <section id="contact" style="text-align: center;">
         <div class="section-header fade-in">
-            <span class="section-label">İLETİŞİM</span>
-            <h2 class="section-title">Bağlantıya Geçin</h2>
-            <p style="color: var(--text-muted)">Yeni projeler ve teknik işbirlikleri için mesaj gönderebilirsiniz.</p>
+            <span class="section-tag">AYAKKABINI ÇIKAR & OTUR</span>
+            <h2 class="section-title">İletişime Geçin</h2>
+            <p style="color: var(--text-dark); font-size: 0.95rem; margin-top: 1rem; font-style: italic;">
+                Teknik projeler ve işbirliği için mesaj bırakabilirsiniz.
+            </p>
         </div>
         <div class="contact-bar fade-in">
             <a href="mailto:zeynepgultenn@gmail.com" class="contact-item">
-                <i class="fas fa-envelope"></i> zeynepgultenn@gmail.com
+                <i class="fas fa-envelope"></i> E-MAİL
             </a>
             <a href="tel:+905459409019" class="contact-item">
-                <i class="fas fa-phone"></i> +90 (545) 940 90 19
+                <i class="fas fa-phone"></i> TELEFON
             </a>
             <a href="https://linkedin.com/in/zeynep-gulten" target="_blank" class="contact-item">
-                <i class="fab fa-linkedin"></i> LinkedIn
+                <i class="fab fa-linkedin"></i> LİNKEDİN
             </a>
             <a href="https://github.com/zeynepgltn" target="_blank" class="contact-item">
-                <i class="fab fa-github"></i> GitHub
+                <i class="fab fa-github"></i> GITHUB
             </a>
         </div>
-        <footer style="margin-top: 4rem; color: var(--glass-border); font-size: 0.8rem;">
-            © 2026 Zeynep Gülten.
+        <footer style="margin-top: 4rem; color: var(--text-dark); font-size: 0.8rem; font-family: 'Courier Prime', monospace; border-top: 3px dashed var(--accent-rust); padding-top: 2rem;">
+            ▓░▓░▓░▓ © 2026 ZEYNEP GÜLTEN. ALL RIGHTS RESERVED. ▓░▓░▓░▓
         </footer>
     </section>
 
     <script>
-        const canvas = document.getElementById('canvas-container');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let w, h;
-
-        function resize() {
-            w = canvas.width = window.innerWidth;
-            h = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * w;
-                this.y = Math.random() * h;
-                this.vx = (Math.random() - 0.5) * 0.3;
-                this.vy = (Math.random() - 0.5) * 0.3;
-                this.size = Math.random() * 2 + 0.5;
-            }
-            update() {
-                this.x += this.vx; this.y += this.vy;
-                if (this.x < 0 || this.x > w) this.vx *= -1;
-                if (this.y < 0 || this.y > h) this.vy *= -1;
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(45, 212, 191, 0.4)';
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            const count = Math.floor(window.innerWidth / 12);
-            for (let i = 0; i < count; i++) particles.push(new Particle());
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, w, h);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-                for (let j = i; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const d = Math.sqrt(dx*dx + dy*dy);
-                    if (d < 120) {
-                        ctx.strokeStyle = `rgba(129, 140, 248, ${1 - d/120})`;
-                        ctx.lineWidth = 0.4;
-                        ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-
-        initParticles();
-        animate();
-
+        // Scroll Observer for Fade-In Animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
             });
         }, { threshold: 0.1 });
+
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
     </script>
 </body>
 </html>
